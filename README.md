@@ -1,6 +1,6 @@
 # Remote Sensing in Python
 
-This repository hosts course materials for **Remote Sensing for Earth and Environmental Science** designed by [Johnny Ryan](https://nicholas.duke.edu/people/faculty/ryan).
+This repository hosts course materials for **ECS211L: Remote Sensing for Earth and Environmental Science** designed by [Johnny Ryan](https://nicholas.duke.edu/people/faculty/ryan).
 
 ## Repository structure
 

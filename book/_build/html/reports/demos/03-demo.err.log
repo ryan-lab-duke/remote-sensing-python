@@ -1,0 +1,65 @@
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/book/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/opt/miniconda3/envs/book/lib/python3.12/site-packages/nbclient/client.py", line 1319, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/book/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/book/lib/python3.12/asyncio/base_events.py", line 686, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/book/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/opt/miniconda3/envs/book/lib/python3.12/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/miniconda3/envs/book/lib/python3.12/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import rasterio
+import numpy as np
+
+src = rasterio.open('data/N46W122.tif')
+src
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mCPLE_OpenFailedError[0m                      Traceback (most recent call last)
+File [0;32mrasterio/_base.pyx:310[0m, in [0;36mrasterio._base.DatasetBase.__init__[0;34m()[0m
+
+File [0;32mrasterio/_base.pyx:221[0m, in [0;36mrasterio._base.open_dataset[0;34m()[0m
+
+File [0;32mrasterio/_err.pyx:359[0m, in [0;36mrasterio._err.exc_wrap_pointer[0;34m()[0m
+
+[0;31mCPLE_OpenFailedError[0m: data/N46W122.tif: No such file or directory
+
+During handling of the above exception, another exception occurred:
+
+[0;31mRasterioIOError[0m                           Traceback (most recent call last)
+Cell [0;32mIn[1], line 4[0m
+[1;32m      1[0m [38;5;28;01mimport[39;00m [38;5;21;01mrasterio[39;00m
+[1;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mnumpy[39;00m [38;5;28;01mas[39;00m [38;5;21;01mnp[39;00m
+[0;32m----> 4[0m src [38;5;241m=[39m [43mrasterio[49m[38;5;241;43m.[39;49m[43mopen[49m[43m([49m[38;5;124;43m'[39;49m[38;5;124;43mdata/N46W122.tif[39;49m[38;5;124;43m'[39;49m[43m)[49m
+[1;32m      5[0m src
+
+File [0;32m/opt/miniconda3/envs/book/lib/python3.12/site-packages/rasterio/env.py:463[0m, in [0;36mensure_env_with_credentials.<locals>.wrapper[0;34m(*args, **kwds)[0m
+[1;32m    460[0m     session [38;5;241m=[39m DummySession()
+[1;32m    462[0m [38;5;28;01mwith[39;00m env_ctor(session[38;5;241m=[39msession):
+[0;32m--> 463[0m     [38;5;28;01mreturn[39;00m [43mf[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwds[49m[43m)[49m
+
+File [0;32m/opt/miniconda3/envs/book/lib/python3.12/site-packages/rasterio/__init__.py:356[0m, in [0;36mopen[0;34m(fp, mode, driver, width, height, count, crs, transform, dtype, nodata, sharing, opener, **kwargs)[0m
+[1;32m    353[0m     path [38;5;241m=[39m _parse_path(raw_dataset_path)
+[1;32m    355[0m [38;5;28;01mif[39;00m mode [38;5;241m==[39m [38;5;124m"[39m[38;5;124mr[39m[38;5;124m"[39m:
+[0;32m--> 356[0m     dataset [38;5;241m=[39m [43mDatasetReader[49m[43m([49m[43mpath[49m[43m,[49m[43m [49m[43mdriver[49m[38;5;241;43m=[39;49m[43mdriver[49m[43m,[49m[43m [49m[43msharing[49m[38;5;241;43m=[39;49m[43msharing[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[1;32m    357[0m [38;5;28;01melif[39;00m mode [38;5;241m==[39m [38;5;124m"[39m[38;5;124mr+[39m[38;5;124m"[39m:
+[1;32m    358[0m     dataset [38;5;241m=[39m get_writer_for_path(path, driver[38;5;241m=[39mdriver)(
+[1;32m    359[0m         path, mode, driver[38;5;241m=[39mdriver, sharing[38;5;241m=[39msharing, [38;5;241m*[39m[38;5;241m*[39mkwargs
+[1;32m    360[0m     )
+
+File [0;32mrasterio/_base.pyx:312[0m, in [0;36mrasterio._base.DatasetBase.__init__[0;34m()[0m
+
+[0;31mRasterioIOError[0m: data/N46W122.tif: No such file or directory
+
