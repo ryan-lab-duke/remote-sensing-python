@@ -1,0 +1,11 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+  - caption: Introduction
+    chapters:
+    - file: demos/01-demo.ipynb
+    - file: demos/02-demo.ipynb
+    - file: assignments/01-assignment.md
