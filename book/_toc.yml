@@ -8,4 +8,4 @@ parts:
     chapters:
     - file: demos/01-demo.ipynb
     - file: demos/02-demo.ipynb
-    - file: assignments/01-assignment.md
+    - file: assignments/01-assignment.ipynb
