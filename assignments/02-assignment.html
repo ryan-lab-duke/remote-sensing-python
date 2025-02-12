@@ -60,11 +60,10 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'assignments/01-assignment';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'assignments/02-assignment';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Image classification in Python" href="../demos/03-demo.html" />
-    <link rel="prev" title="Demo 1" href="../demos/02-demo.html" />
+    <link rel="prev" title="Image classification in Python" href="../demos/03-demo.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -169,15 +168,15 @@
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../demos/01-demo.html">Install Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../demos/02-demo.html">Demo 1</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Assignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-assignment.html">Assignment</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised Classification - Part 1</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../demos/03-demo.html">Image classification in Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="02-assignment.html">Assignment</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Assignment</a></li>
 </ul>
 
     </div>
@@ -254,7 +253,7 @@
       
       
       
-      <li><a href="https://github.com/ryan-lab-duke/remote-sensing-python/issues/new?title=Issue%20on%20page%20%2Fassignments/01-assignment.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/ryan-lab-duke/remote-sensing-python/issues/new?title=Issue%20on%20page%20%2Fassignments/02-assignment.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -284,7 +283,7 @@
       
       
       
-      <li><a href="../_sources/assignments/01-assignment.ipynb" target="_blank"
+      <li><a href="../_sources/assignments/02-assignment.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -393,23 +392,13 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-<p>In this assignment, we will be working with a Landsat 8 image of the Greenland Ice Sheet from Jul 24, 2015. The image can be downloaded from <a class="reference external" href="https://prodduke-my.sharepoint.com/:i:/g/personal/jr555_duke_edu/EXhloccheWBEhVULB0DDhZ0BjhURBTBuJSIBSZhuMVJBUg?e=x5sGzL">here</a>. There are three bands in this image corresponding to Blue, Green, and Red (in that order).</p>
+<p>In this assignment, I would like you to produce a training dataset for the Landsat image that you downloaded for Lab #4. Once you have produced the training dataset, answer the following questions.</p>
 <section id="task-1-10-points">
 <h2>Task 1 (10 points)<a class="headerlink" href="#task-1-10-points" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p>a) Open the <code class="docutils literal notranslate"><span class="pre">landsat-rgb.tif</span></code> file (i.e. <code class="docutils literal notranslate"><span class="pre">src</span> <span class="pre">=</span> <span class="pre">rasterio.open('data/landsat-rgb.tif')</span></code>). How many rows and columns are in this image?</p></li>
-<li><p>b) What is the coordinate reference system of this image? What is the spatial resolution of this image?</p></li>
-<li><p>c) Read each band as a separate variable (e.g. <code class="docutils literal notranslate"><span class="pre">band1</span> <span class="pre">=</span> <span class="pre">src.read(1)</span></code>) and scale the values between 0 and 1 by dividing by the maximum value of a 16-bit integer (i.e. <code class="docutils literal notranslate"><span class="pre">band1</span> <span class="pre">=</span> <span class="pre">src1.read(1)</span> <span class="pre">/</span> <span class="pre">65536</span></code>).</p></li>
-<li><p>d) Stack the bands and plot a true color image.</p></li>
-<li><p>e) Compute spectral index based on the RGB bands that emphasizes the water in the image. Once you have done that, make another plot (with a colorbar) to show your index.</p></li>
-</ul>
-<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
-<summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-text">Hint</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<p class="sd-card-text">Access the first band of the stacked variable using <code class="docutils literal notranslate"><span class="pre">rgb[:,:,0]</span></code>.</p>
-</div>
-</details><ul class="simple">
-<li><p>f) Export your spectral index as a GeoTIFF and open it in QGIS. If you were asked to distinguish between water and non-water pixels in your index, what threshold would you use? Note you can use the <strong>Identify features</strong> to obtain pixel values.</p></li>
+<li><p>a) List the features you decided to classify in your image?</p></li>
+<li><p>b) Produce three bi-spectral plots that provide insight into the separability of your classes.</p></li>
+<li><p>c) Compute M-statistics (i.e. for each band) for each pair of classes. Discuss which classes are likely to be easily discriminated and which classes may be more challenging to discriminate.</p></li>
 </ul>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -449,22 +438,13 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../demos/02-demo.html"
+       href="../demos/03-demo.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Demo 1</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="../demos/03-demo.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Image classification in Python</p>
       </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
