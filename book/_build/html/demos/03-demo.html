@@ -63,6 +63,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'demos/03-demo';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Assignment" href="../assignments/02-assignment.html" />
     <link rel="prev" title="Assignment" href="../assignments/01-assignment.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -176,6 +177,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised Classification - Part 1</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Image classification in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/02-assignment.html">Assignment</a></li>
 </ul>
 
     </div>
@@ -616,7 +618,7 @@
 </table>
 </div></div></div>
 </div>
-<p>There are a couple of things going on here. We first defined a list of <code class="docutils literal notranslate"><span class="pre">ones</span></code> using [<code class="docutils literal notranslate"><span class="pre">np.full</span></code>][<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.full.html">https://numpy.org/doc/stable/reference/generated/numpy.full.html</a>] which we [<code class="docutils literal notranslate"><span class="pre">zipped</span></code>][<a class="reference external" href="https://docs.python.org/3.3/library/functions.html#zip">https://docs.python.org/3.3/library/functions.html#zip</a>] with the Band 2 values that represent lake pixels. Then we converted this to a <code class="docutils literal notranslate"><span class="pre">list</span></code> and then to a <code class="docutils literal notranslate"><span class="pre">pandas</span> <span class="pre">DataFrame</span></code> with the column names <code class="docutils literal notranslate"><span class="pre">label</span></code> and <code class="docutils literal notranslate"><span class="pre">band2</span></code>.</p>
+<p>There are a couple of things going on here. We first defined a list of <code class="docutils literal notranslate"><span class="pre">ones</span></code> using <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.full.html"><code class="docutils literal notranslate"><span class="pre">np.full</span></code></a> which we <a class="reference external" href="https://docs.python.org/3.3/library/functions.html#zip"><code class="docutils literal notranslate"><span class="pre">zipped</span></code></a> with the Band 2 values that represent lake pixels. Then we converted this to a <code class="docutils literal notranslate"><span class="pre">list</span></code> and then to a <code class="docutils literal notranslate"><span class="pre">pandas</span> <span class="pre">DataFrame</span></code> with the column names <code class="docutils literal notranslate"><span class="pre">label</span></code> and <code class="docutils literal notranslate"><span class="pre">band2</span></code>.</p>
 <p>Since our classification will depend on several bands, we can make a DataFrame that represent the pixel values of every band using a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1037,9 +1039,9 @@ dtype: float64
 <p class="sidebar-title"></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>M &lt; 1: Poor separability.
-1 ≤ M ≤ 2: Moderate separability.
-M &gt; 2: Good separability.</p>
+<p>M &lt; 1: Poor separability</p>
+<p>1 ≤ M ≤ 2: Moderate separability</p>
+<p>M &gt; 2: Good separability.</p>
 </div>
 </aside>
 <p>The M-Statistic confirms that there should be good separability between Classes 1 (cleared) and 2 (forest) for all the bands except Band 5.</p>
@@ -1104,6 +1106,15 @@ dtype: float64
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">Assignment</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="../assignments/02-assignment.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Assignment</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
