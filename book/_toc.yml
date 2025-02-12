@@ -9,3 +9,8 @@ parts:
     - file: demos/01-demo.ipynb
     - file: demos/02-demo.ipynb
     - file: assignments/01-assignment.ipynb
+
+  - caption: Supervised Classification - Part 1
+    chapters:
+    - file: demos/03-demo.ipynb
+    - file: assignments/02-assignment.ipynb

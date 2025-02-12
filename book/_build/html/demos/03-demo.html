@@ -63,6 +63,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'demos/03-demo';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Assignment" href="../assignments/01-assignment.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -113,8 +114,6 @@
     <div class="bd-container__inner bd-page-width">
       
       
-      
-        
       
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
@@ -173,6 +172,10 @@
 <li class="toctree-l1"><a class="reference internal" href="01-demo.html">Install Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02-demo.html">Demo 1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../assignments/01-assignment.html">Assignment</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised Classification - Part 1</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Image classification in Python</a></li>
 </ul>
 
     </div>
@@ -369,6 +372,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#produce-training-dataset">Produce training dataset</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#masking-raster-data-using-shapefile">Masking raster data using shapefile</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#format-training-dataset">Format training dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics-for-the-training-dataset">Summary statistics for the training dataset</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#separability-testing">Separability testing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#m-statistic">M-statistic</a></li>
 </ul>
@@ -819,6 +823,128 @@
 </div>
 </div>
 </section>
+<section id="summary-statistics-for-the-training-dataset">
+<h2>Summary statistics for the training dataset<a class="headerlink" href="#summary-statistics-for-the-training-dataset" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">training_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;labels&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>band1</th>
+      <th>band2</th>
+      <th>band3</th>
+      <th>band4</th>
+      <th>band5</th>
+      <th>band6</th>
+      <th>band7</th>
+    </tr>
+    <tr>
+      <th>labels</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>8161.185504</td>
+      <td>8448.916462</td>
+      <td>9352.192875</td>
+      <td>9788.692875</td>
+      <td>15444.443489</td>
+      <td>16229.616708</td>
+      <td>12594.883292</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7416.639942</td>
+      <td>7487.944606</td>
+      <td>8048.635569</td>
+      <td>7681.294461</td>
+      <td>15653.613703</td>
+      <td>10159.087464</td>
+      <td>8349.674927</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7820.300981</td>
+      <td>8053.422028</td>
+      <td>9506.115594</td>
+      <td>8962.172301</td>
+      <td>23864.091603</td>
+      <td>15648.476554</td>
+      <td>11192.743730</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7384.654624</td>
+      <td>7691.852601</td>
+      <td>8486.945087</td>
+      <td>8166.203757</td>
+      <td>7728.687861</td>
+      <td>7743.832370</td>
+      <td>7699.452312</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>7313.515112</td>
+      <td>7540.395532</td>
+      <td>7787.961235</td>
+      <td>7547.877464</td>
+      <td>7602.442838</td>
+      <td>7799.425427</td>
+      <td>7775.527595</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>7331.883721</td>
+      <td>7511.483721</td>
+      <td>7940.525581</td>
+      <td>7603.255814</td>
+      <td>7509.227907</td>
+      <td>7500.590698</td>
+      <td>7466.423256</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>12785.408602</td>
+      <td>13732.512545</td>
+      <td>16671.784946</td>
+      <td>18257.075269</td>
+      <td>19734.172043</td>
+      <td>22963.752688</td>
+      <td>22489.347670</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
 <section id="separability-testing">
 <h2>Separability testing<a class="headerlink" href="#separability-testing" title="Link to this heading">#</a></h2>
 <p>Before we begin our classification, we should check the separability of our training data. We can do this using a bi-spectral plot.</p>
@@ -970,6 +1096,15 @@ dtype: float64
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="../assignments/01-assignment.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Assignment</p>
+      </div>
+    </a>
 </div>
                 </footer>
               
@@ -991,6 +1126,7 @@ dtype: float64
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#produce-training-dataset">Produce training dataset</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#masking-raster-data-using-shapefile">Masking raster data using shapefile</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#format-training-dataset">Format training dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics-for-the-training-dataset">Summary statistics for the training dataset</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#separability-testing">Separability testing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#m-statistic">M-statistic</a></li>
 </ul>
