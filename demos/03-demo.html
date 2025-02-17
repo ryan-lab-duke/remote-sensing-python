@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Image classification in Python &#8212; Guide to Remote Sensing with Python</title>
+    <title>Demo 3 &#8212; Guide to Remote Sensing with Python</title>
   
   
   
@@ -63,8 +63,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'demos/03-demo';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Assignment" href="../assignments/02-assignment.html" />
-    <link rel="prev" title="Assignment" href="../assignments/01-assignment.html" />
+    <link rel="next" title="Assignment" href="../assignments/03-assignment.html" />
+    <link rel="prev" title="Assignment" href="../assignments/02-assignment.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -170,14 +170,19 @@
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01-demo.html">Install Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="02-demo.html">Demo 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install-python.html">Install Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-demo.html">Demo 1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../assignments/01-assignment.html">Assignment</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised Classification - Part 1</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Image classification in Python</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="02-demo.html">Demo 2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../assignments/02-assignment.html">Assignment</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Supervised Classification - Part 2</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Demo 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../assignments/03-assignment.html">Assignment</a></li>
 </ul>
 
     </div>
@@ -360,7 +365,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Image classification in Python</h1>
+    <h1>Demo 3</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -370,13 +375,16 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-data">Preparing data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#produce-training-dataset">Produce training dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#masking-raster-data-using-shapefile">Masking raster data using shapefile</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#format-training-dataset">Format training dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics-for-the-training-dataset">Summary statistics for the training dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#separability-testing">Separability testing</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#m-statistic">M-statistic</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classification">Classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#k-nearest-neighbors">K-nearest Neighbors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#split-training-and-testing-data">Split training and testing data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-classifier-fit-classifier-and-predict-labels">Define classifier, fit classifier, and predict labels</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate-classifier">Evaluate classifier</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classify-whole-image">Classify whole image</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot">Plot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-as-geotiff">Export as GeoTIFF</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -388,260 +396,25 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="image-classification-in-python">
-<h1>Image classification in Python<a class="headerlink" href="#image-classification-in-python" title="Link to this heading">#</a></h1>
-<p>In the previous week, we computed some band indices and learnt that positive NDWI values were likely to be associated with water (e.g lakes, rivers, ocean). But what if someone wanted to know how much water was in the image? To do this, we would first have to classify pixels that are likely to be water. In this week, we will learn how to do this, and other quantitative analysis, by combining raster and vector data.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="demo-3">
+<h1>Demo 3<a class="headerlink" href="#demo-3" title="Link to this heading">#</a></h1>
+<p>The lab this week is a continuation of the previous week. We will use the training dataset that we generated last week to classify every pixel in our remote sensing image. Then we will evaluate our classification using a confusion matrix.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>I forgot to tell you to save the training dataset last week. So you will need to re-run your code for that assignment and save the training dataset using <code class="docutils literal notranslate"><span class="pre">training_data.to_csv('data/training_dataset.csv')</span></code></p>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import packages</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
-<span class="c1"># Define list of Landsat bands</span>
-<span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;data/landsat/*.tif&#39;</span><span class="p">))</span>
-<span class="n">files</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;data/landsat/band1.tif&#39;,
- &#39;data/landsat/band2.tif&#39;,
- &#39;data/landsat/band3.tif&#39;,
- &#39;data/landsat/band4.tif&#39;,
- &#39;data/landsat/band5.tif&#39;,
- &#39;data/landsat/band6.tif&#39;,
- &#39;data/landsat/band7.tif&#39;]
-</pre></div>
-</div>
-</div>
-</div>
-<section id="preparing-data">
-<h2>Preparing data<a class="headerlink" href="#preparing-data" title="Link to this heading">#</a></h2>
-<p>We first need to produce a true color image so that we can identify our classes. Below is an example of exporting a true color image as a GeoTIFF that can be imported into QGIS. Although note that any combination of bands could be exported (e.g. color infrared) depending on what features we would like to identify.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define paths to data</span>
-<span class="n">src_2</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">band_2</span> <span class="o">=</span> <span class="n">src_2</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">src_3</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">band_3</span> <span class="o">=</span> <span class="n">src_3</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">src_4</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-<span class="n">band_4</span> <span class="o">=</span> <span class="n">src_4</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="c1"># Write true color image</span>
-<span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;driver&#39;</span><span class="p">:</span> <span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
-        <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">band_2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-        <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">band_2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-        <span class="s1">&#39;count&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-        <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="n">band_2</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-        <span class="s1">&#39;crs&#39;</span><span class="p">:</span> <span class="n">src_2</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
-        <span class="s1">&#39;transform&#39;</span><span class="p">:</span><span class="n">src_2</span><span class="o">.</span><span class="n">transform</span><span class="p">}</span>
-        
-<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;data/true-color.tif&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">meta</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
-    <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">band_4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">band_3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">band_2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="produce-training-dataset">
-<h2>Produce training dataset<a class="headerlink" href="#produce-training-dataset" title="Link to this heading">#</a></h2>
-<p>Next, we will import the GeoTIFF into QGIS and generate a training dataset that we can use for our supervised classification. The easiest way to do this is to create polygons that contain our features of interest and save it as a shapefile layer.</p>
-<a class="bg-primary mb-1 reference internal image-reference" href="../_images/create-layer.png"><img alt="create shapefile layer" class="bg-primary mb-1 align-center" src="../_images/create-layer.png" style="width: 600px;" /></a>
-<p>In this example, we will make a new shapefile called <code class="docutils literal notranslate"><span class="pre">lake.shp</span></code>, making sure that <strong>Geometry type</strong> is set to <code class="docutils literal notranslate"><span class="pre">Polygon</span></code> and the <strong>CRS</strong> is set to the <strong>same as our Lansdat true color image</strong>. In our case, this is <code class="docutils literal notranslate"><span class="pre">WGS</span> <span class="pre">84</span> <span class="pre">/</span> <span class="pre">UTM</span> <span class="pre">Zone</span> <span class="pre">10N</span></code>.</p>
-<a class="bg-primary mb-1 reference internal image-reference" href="../_images/layer-attributes.png"><img alt="create shapefile layer" class="bg-primary mb-1 align-center" src="../_images/layer-attributes.png" style="width: 600px;" /></a>
-<p>Once we have created a new shapefile, we can edit it by selecting it in the <strong>Layers</strong> panel (i.e. by left-clicking it once) and clicking <strong>Toggle Editing</strong> (the little pencil button).</p>
-<a class="bg-primary mb-1 reference internal image-reference" href="../_images/toggle.png"><img alt="toggle editing" class="bg-primary mb-1 align-center" src="../_images/toggle.png" style="width: 600px;" /></a>
-<p>Now we can click the <strong>Add Polygon Feature</strong> button to the right of the <strong>Toggle Editing</strong> button to make a new polyon. Digitize a small area within the feature of interest (in our case, some pixels in the lake), set the <strong>id</strong> to 1 (although it doesn’t matter which number we choose), and click <strong>OK</strong>. Repeat this step, to sample several lakes in our image.</p>
-<a class="bg-primary mb-1 reference internal image-reference" href="../_images/digitize-polygon.png"><img alt="digitize" class="bg-primary mb-1 align-center" src="../_images/digitize-polygon.png" style="width: 600px;" /></a>
-<p>When we feel good about our training dataset, we can click the <strong>Toggle Editing</strong> button again to save our shapefile. We can then repeat this procedure for every feature that we want to classify. In our example, we have digitized seven features that include: lake, forest, cleared, river, sand, ocean, and grass.</p>
-<a class="bg-primary mb-1 reference internal image-reference" href="../_images/classes.png"><img alt="digitize" class="bg-primary mb-1 align-center" src="../_images/classes.png" style="width: 200px;" /></a>
-</section>
-<section id="masking-raster-data-using-shapefile">
-<h2>Masking raster data using shapefile<a class="headerlink" href="#masking-raster-data-using-shapefile" title="Link to this heading">#</a></h2>
-<p>We now should have several shapefiles containing polygons that outline our features of interest. We can read them using Python using the <code class="docutils literal notranslate"><span class="pre">GeoPandas</span></code> package.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
-<span class="n">lake</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;data/lake.shp&#39;</span><span class="p">)</span>
-<span class="n">lake</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>id</th>
-      <th>geometry</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>POLYGON ((411681.33 4858920.1, 412387.6 485888...</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>POLYGON ((409741.747 4847556.896, 409822.866 4...</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>POLYGON ((409904.889 4851822.25, 410222.19 485...</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<p>Our <strong>GeoDataFrame</strong> contains three rows, each of which is a different polygon. The <strong>geometry</strong> column contains the coordinates that represent the polygons.</p>
-<p><code class="docutils literal notranslate"><span class="pre">Rasterio</span></code> provides a function called <a class="reference external" href="https://rasterio.readthedocs.io/en/latest/api/rasterio.mask.html#"><code class="docutils literal notranslate"><span class="pre">mask.mask</span></code></a> for masking raster data using these polygons. This function has a few arguments. The first is the raster dataset (i.e. <code class="docutils literal notranslate"><span class="pre">src</span></code> in our case). The second argument is the shape to mask. In the docs, it notes that this shape shold be a format that implements the Python geo interface protocol (such as a Shapely Polygon).</p>
-<p>So we will have to specify only the <strong>geometry</strong> of our <code class="docutils literal notranslate"><span class="pre">GeoPandas</span></code> DataFrame, not the DataFrame object itself. The <strong>Invert</strong> argument determines whether pixels inside or outside shapes will be masked. The <strong>nodata</strong> argument allows us to set the no data value (i.e. values of pixels outside the mask).</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">rasterio.mask</span>
-<span class="n">lake_mask</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">mask</span><span class="p">(</span><span class="n">src_2</span><span class="p">,</span> <span class="n">lake</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">lake_mask</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[[0, 0, 0, ..., 0, 0, 0],
-        [0, 0, 0, ..., 0, 0, 0],
-        [0, 0, 0, ..., 0, 0, 0],
-        ...,
-        [0, 0, 0, ..., 0, 0, 0],
-        [0, 0, 0, ..., 0, 0, 0],
-        [0, 0, 0, ..., 0, 0, 0]]], shape=(1, 1422, 1208), dtype=uint16)
-</pre></div>
-</div>
-</div>
-</div>
-<aside class="margin sidebar">
-<p class="sidebar-title"></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">src_2</span></code> represents <strong>Band 2</strong> (i.e the Blue band)</p>
-</div>
-</aside>
-<p>This function produced an arry called <code class="docutils literal notranslate"><span class="pre">lake_mask</span></code> with the same dimensions as the original Landsat band except that all values outside of the lake polygons were classified as zeros. Therefore any value higher than zero is a pixel from the Landsat band that is within the lake polygons. We can subset these values by masking the array like so:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lake_mask_values</span> <span class="o">=</span> <span class="n">lake_mask</span><span class="p">[</span><span class="n">lake_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="format-training-dataset">
-<h2>Format training dataset<a class="headerlink" href="#format-training-dataset" title="Link to this heading">#</a></h2>
-<p>To classify our image using <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>, we need to format these values as a labels and features. It’s easiest to do this by constructing a <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">lake_mask_values</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">lake_mask_values</span><span class="p">)),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">])</span>
-<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>label</th>
-      <th>band2</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>7789</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>7789</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1</td>
-      <td>7831</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1</td>
-      <td>7872</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1</td>
-      <td>7896</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<p>There are a couple of things going on here. We first defined a list of <code class="docutils literal notranslate"><span class="pre">ones</span></code> using <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.full.html"><code class="docutils literal notranslate"><span class="pre">np.full</span></code></a> which we <a class="reference external" href="https://docs.python.org/3.3/library/functions.html#zip"><code class="docutils literal notranslate"><span class="pre">zipped</span></code></a> with the Band 2 values that represent lake pixels. Then we converted this to a <code class="docutils literal notranslate"><span class="pre">list</span></code> and then to a <code class="docutils literal notranslate"><span class="pre">pandas</span> <span class="pre">DataFrame</span></code> with the column names <code class="docutils literal notranslate"><span class="pre">label</span></code> and <code class="docutils literal notranslate"><span class="pre">band2</span></code>.</p>
-<p>Since our classification will depend on several bands, we can make a DataFrame that represent the pixel values of every band using a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-    <span class="c1"># Open file</span>
-    <span class="n">src</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-    
-    <span class="c1"># Mask</span>
-    <span class="n">lake_mask</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">mask</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lake</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    
-    <span class="c1"># Append to empty list</span>
-    <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lake_mask</span><span class="p">[</span><span class="n">lake_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">])</span>
-
-<span class="c1"># Make a DataFrame</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-
-<span class="c1"># Name columns</span>
-<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;band1&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">,</span> <span class="s1">&#39;band3&#39;</span><span class="p">,</span> <span class="s1">&#39;band4&#39;</span><span class="p">,</span> <span class="s1">&#39;band5&#39;</span><span class="p">,</span> <span class="s1">&#39;band6&#39;</span><span class="p">,</span> <span class="s1">&#39;band7&#39;</span><span class="p">]</span>
-
-<span class="c1"># Define labels column</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="c1"># Import training dataset</span>
+<span class="n">training_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/training_dataset.csv&#39;</span><span class="p">)</span>
+<span class="n">training_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -677,159 +450,415 @@
   <tbody>
     <tr>
       <th>0</th>
-      <td>7285</td>
-      <td>7789</td>
-      <td>9017</td>
-      <td>8582</td>
-      <td>7863</td>
-      <td>8011</td>
-      <td>7970</td>
+      <td>8285</td>
+      <td>8488</td>
+      <td>9276</td>
+      <td>9774</td>
+      <td>13948</td>
+      <td>16238</td>
+      <td>12979</td>
       <td>1</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>7323</td>
-      <td>7789</td>
-      <td>9020</td>
-      <td>8584</td>
-      <td>7851</td>
-      <td>7982</td>
-      <td>7942</td>
+      <td>8320</td>
+      <td>8529</td>
+      <td>9257</td>
+      <td>9797</td>
+      <td>14101</td>
+      <td>16360</td>
+      <td>13168</td>
       <td>1</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>7363</td>
-      <td>7831</td>
-      <td>9026</td>
-      <td>8595</td>
-      <td>7849</td>
-      <td>7968</td>
-      <td>7928</td>
+      <td>8404</td>
+      <td>8623</td>
+      <td>9381</td>
+      <td>9907</td>
+      <td>14222</td>
+      <td>16337</td>
+      <td>13152</td>
       <td>1</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>7414</td>
-      <td>7872</td>
-      <td>9051</td>
-      <td>8615</td>
-      <td>7860</td>
-      <td>7959</td>
-      <td>7916</td>
+      <td>8740</td>
+      <td>9015</td>
+      <td>9852</td>
+      <td>10619</td>
+      <td>14269</td>
+      <td>17921</td>
+      <td>14906</td>
       <td>1</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>7412</td>
-      <td>7896</td>
-      <td>9020</td>
-      <td>8591</td>
-      <td>7860</td>
-      <td>7942</td>
-      <td>7894</td>
+      <td>8510</td>
+      <td>8727</td>
+      <td>9620</td>
+      <td>10169</td>
+      <td>14885</td>
+      <td>16912</td>
+      <td>13714</td>
       <td>1</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p>We actually have seven features so we need another for loop that iterates over every feature that we digitized.</p>
+<section id="classification">
+<h2>Classification<a class="headerlink" href="#classification" title="Link to this heading">#</a></h2>
+<section id="k-nearest-neighbors">
+<h3>K-nearest Neighbors<a class="headerlink" href="#k-nearest-neighbors" title="Link to this heading">#</a></h3>
+<p>We will start with a simple <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html#kneighborsclassifier">K-nearest neighbors classifcation</a>. This approach will classify new “unseen” points by finding the K closest labelled points. The main decision we have to make is the number of neighbors (i.e. <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code>) which defaults to 5 but can be customized. The standard version of this algorithm will then use a majority vote to determine which class to assign the new point (hence we typically set K to an odd value).</p>
+</section>
+<section id="split-training-and-testing-data">
+<h3>Split training and testing data<a class="headerlink" href="#split-training-and-testing-data" title="Link to this heading">#</a></h3>
+<p>The K-nearest neighbors classifcation can be accessed using a package called <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>. But before we do that, we need to format our training dataset into separate features (<code class="docutils literal notranslate"><span class="pre">X</span></code>) and labels (<code class="docutils literal notranslate"><span class="pre">y</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">training_data</span><span class="p">[[</span><span class="s1">&#39;band1&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">,</span> <span class="s1">&#39;band3&#39;</span><span class="p">,</span> <span class="s1">&#39;band4&#39;</span><span class="p">,</span> <span class="s1">&#39;band5&#39;</span><span class="p">,</span> <span class="s1">&#39;band6&#39;</span><span class="p">,</span> <span class="s1">&#39;band7&#39;</span><span class="p">]]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We also need to separate our data in training and testing data. Our testing data will not be used to train the classifier so we can use it to independently evaluate the classifier’s performance. In the code below, we will reserve 20% of the data for testing (i.e. <code class="docutils literal notranslate"><span class="pre">test_size=0.2</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="c1"># Split into training and testing data</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-random_state"><code class="docutils literal notranslate"><span class="pre">random_state</span></code></a> argument controls the shuffling applied to the data before applying the split. We can pass an <code class="docutils literal notranslate"><span class="pre">int</span></code> for reproducible output across multiple function calls.</p>
+</div>
+</aside>
+</section>
+<section id="define-classifier-fit-classifier-and-predict-labels">
+<h3>Define classifier, fit classifier, and predict labels<a class="headerlink" href="#define-classifier-fit-classifier-and-predict-labels" title="Link to this heading">#</a></h3>
+<p>Now we can apply the K-nearest neighbors classifier to our training data like so:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+
+<span class="c1"># Define classifier</span>
+<span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+
+<span class="c1"># Fit classifier</span>
+<span class="n">knn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Make predictions</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">y_pred</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([5, 3, 5, ..., 5, 5, 5], shape=(1373,))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="evaluate-classifier">
+<h3>Evaluate classifier<a class="headerlink" href="#evaluate-classifier" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> variable contains a list of <strong>predicted</strong> labels for each row of the testing dataset. We can compare these predicted labels to the actual labels using a <strong>confusion matrix</strong> to understand how our classifier is performing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">confusion_matrix</span>
+
+<span class="c1"># Define class labels</span>
+<span class="n">class_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cleared&#39;</span><span class="p">,</span> <span class="s1">&#39;forest&#39;</span><span class="p">,</span> <span class="s1">&#39;grass&#39;</span><span class="p">,</span> <span class="s1">&#39;lake&#39;</span><span class="p">,</span> <span class="s1">&#39;ocean&#39;</span><span class="p">,</span> <span class="s1">&#39;river&#39;</span><span class="p">,</span> <span class="s1">&#39;sand&#39;</span><span class="p">]</span>
+
+<span class="c1"># Compute confusion matrix</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+
+<span class="c1"># Convert to DataFrame</span>
+<span class="n">cm_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">class_labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">class_labels</span><span class="p">)</span>
+
+<span class="c1"># Rename index and columns for clarity</span>
+<span class="n">cm_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Actual&quot;</span>
+<span class="n">cm_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Predicted&quot;</span>
+<span class="n">cm_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Predicted</th>
+      <th>cleared</th>
+      <th>forest</th>
+      <th>grass</th>
+      <th>lake</th>
+      <th>ocean</th>
+      <th>river</th>
+      <th>sand</th>
+    </tr>
+    <tr>
+      <th>Actual</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>cleared</th>
+      <td>175</td>
+      <td>0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>forest</th>
+      <td>0</td>
+      <td>133</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>grass</th>
+      <td>1</td>
+      <td>0</td>
+      <td>173</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>lake</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>138</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>ocean</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>603</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>river</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>83</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>sand</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>It looks like the classification did a pretty good job. Although our confusion matrix shows that our classifier mislabelled <strong>6 points</strong> as <code class="docutils literal notranslate"><span class="pre">grass</span></code> when they should have been <code class="docutils literal notranslate"><span class="pre">cleared</span></code>. It also mislabelled one point as <code class="docutils literal notranslate"><span class="pre">cleared</span></code> when it should have been <code class="docutils literal notranslate"><span class="pre">grass</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sklearn</span></code> has a function for computing the errors of commission and omission although it terms them <strong>precision</strong> and <strong>recall</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">precision_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">recall_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span>
+
+<span class="n">precisions</span> <span class="o">=</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">recalls</span> <span class="o">=</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">error_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">precisions</span><span class="p">,</span> <span class="n">recalls</span><span class="p">)),</span> <span class="n">index</span><span class="o">=</span><span class="n">class_labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;precision&#39;</span><span class="p">,</span> <span class="s1">&#39;recall&#39;</span><span class="p">])</span>
+<span class="n">error_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>precision</th>
+      <th>recall</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>cleared</th>
+      <td>0.994318</td>
+      <td>0.966851</td>
+    </tr>
+    <tr>
+      <th>forest</th>
+      <td>1.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>grass</th>
+      <td>0.966480</td>
+      <td>0.994253</td>
+    </tr>
+    <tr>
+      <th>lake</th>
+      <td>1.000000</td>
+      <td>0.992806</td>
+    </tr>
+    <tr>
+      <th>ocean</th>
+      <td>1.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>river</th>
+      <td>0.988095</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>sand</th>
+      <td>1.000000</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Finally, we can find the overall accuracy of our classifier like so:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">overall_accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">overall_accuracy</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9941733430444283
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="classify-whole-image">
+<h3>Classify whole image<a class="headerlink" href="#classify-whole-image" title="Link to this heading">#</a></h3>
+<p>Since our classifier is performing pretty accurately according to our testing data, we can go ahead and classify every pixel in our Landat image. To do this, we first have to import all the <strong>features</strong> that our classifier used. In this case, this is just the seven bands from the image. But note that if the classifier was trained on a spectral index, then we would have to import that as well.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define list of Landsat bands</span>
-<span class="n">shapefiles</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;data/*.shp&#39;</span><span class="p">))</span>
+<span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;data/landsat/*.tif&#39;</span><span class="p">))</span>
 
-<span class="n">final_values</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shapefiles</span><span class="p">)):</span>
-    <span class="c1"># Read shapefile</span>
-    <span class="n">feature</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">shapefiles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-    
-    <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-        <span class="c1"># Open file</span>
-        <span class="n">src</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-        
-        <span class="c1"># Mask</span>
-        <span class="n">feature_mask</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">mask</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        
-        <span class="c1"># Append to band list</span>
-        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature_mask</span><span class="p">[</span><span class="n">feature_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">])</span>
+<span class="c1"># Function to read a GeoTIFF file and return as a flattened array</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_geotiff</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
-    <span class="c1"># Append to feature list</span>
-    <span class="n">final_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">final_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-<span class="n">df1</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;band1&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">,</span> <span class="s1">&#39;band3&#39;</span><span class="p">,</span> <span class="s1">&#39;band4&#39;</span><span class="p">,</span> <span class="s1">&#39;band5&#39;</span><span class="p">,</span> <span class="s1">&#39;band6&#39;</span><span class="p">,</span> <span class="s1">&#39;band7&#39;</span><span class="p">]</span>
-<span class="n">df1</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">final_values</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-<span class="n">df2</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;band1&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">,</span> <span class="s1">&#39;band3&#39;</span><span class="p">,</span> <span class="s1">&#39;band4&#39;</span><span class="p">,</span> <span class="s1">&#39;band5&#39;</span><span class="p">,</span> <span class="s1">&#39;band6&#39;</span><span class="p">,</span> <span class="s1">&#39;band7&#39;</span><span class="p">]</span>
-<span class="n">df2</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">df3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">final_values</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-<span class="n">df3</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;band1&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">,</span> <span class="s1">&#39;band3&#39;</span><span class="p">,</span> <span class="s1">&#39;band4&#39;</span><span class="p">,</span> <span class="s1">&#39;band5&#39;</span><span class="p">,</span> <span class="s1">&#39;band6&#39;</span><span class="p">,</span> <span class="s1">&#39;band7&#39;</span><span class="p">]</span>
-<span class="n">df3</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">df3</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
-<span class="n">df4</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">final_values</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-<span class="n">df4</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;band1&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">,</span> <span class="s1">&#39;band3&#39;</span><span class="p">,</span> <span class="s1">&#39;band4&#39;</span><span class="p">,</span> <span class="s1">&#39;band5&#39;</span><span class="p">,</span> <span class="s1">&#39;band6&#39;</span><span class="p">,</span> <span class="s1">&#39;band7&#39;</span><span class="p">]</span>
-<span class="n">df4</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">df4</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span>
-<span class="n">df5</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">final_values</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-<span class="n">df5</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;band1&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">,</span> <span class="s1">&#39;band3&#39;</span><span class="p">,</span> <span class="s1">&#39;band4&#39;</span><span class="p">,</span> <span class="s1">&#39;band5&#39;</span><span class="p">,</span> <span class="s1">&#39;band6&#39;</span><span class="p">,</span> <span class="s1">&#39;band7&#39;</span><span class="p">]</span>
-<span class="n">df5</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">df5</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
-<span class="n">df6</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">final_values</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-<span class="n">df6</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;band1&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">,</span> <span class="s1">&#39;band3&#39;</span><span class="p">,</span> <span class="s1">&#39;band4&#39;</span><span class="p">,</span> <span class="s1">&#39;band5&#39;</span><span class="p">,</span> <span class="s1">&#39;band6&#39;</span><span class="p">,</span> <span class="s1">&#39;band7&#39;</span><span class="p">]</span>
-<span class="n">df6</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">df6</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">6</span><span class="p">)</span>
-<span class="n">df7</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">final_values</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-<span class="n">df7</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;band1&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">,</span> <span class="s1">&#39;band3&#39;</span><span class="p">,</span> <span class="s1">&#39;band4&#39;</span><span class="p">,</span> <span class="s1">&#39;band5&#39;</span><span class="p">,</span> <span class="s1">&#39;band6&#39;</span><span class="p">,</span> <span class="s1">&#39;band7&#39;</span><span class="p">]</span>
-<span class="n">df7</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">df7</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">7</span><span class="p">)</span>
+<span class="c1"># Read each GeoTIFF file and store the data in a dictionary</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s1">&#39;band</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">read_geotiff</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">)}</span>
 
-<span class="n">training_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">df3</span><span class="p">,</span> <span class="n">df4</span><span class="p">,</span> <span class="n">df5</span><span class="p">,</span> <span class="n">df6</span><span class="p">,</span> <span class="n">df7</span><span class="p">])</span>
-<span class="n">training_data</span><span class="o">.</span><span class="n">shape</span>
+<span class="c1"># Create DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(6862, 8)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1717776, 7)
 </pre></div>
 </div>
 </div>
 </div>
-<p>Sorry, I was in a rush (extra credit if you can make that more concise!).</p>
-<p>What we have now is a training dataset with several thousand rows and eight columns. Each row is a pixel that we know is contained in the associated <code class="docutils literal notranslate"><span class="pre">label</span></code> class. Our <code class="docutils literal notranslate"><span class="pre">label</span></code> column numerically represents the different features (i.e. <code class="docutils literal notranslate"><span class="pre">1</span></code> corresponds to <code class="docutils literal notranslate"><span class="pre">cleared</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code> corresponds to <code class="docutils literal notranslate"><span class="pre">forest</span></code>).</p>
+<p>Each row of this DataFrame is a pixel in the Landsat image. We can predict the label of each pixel using our pre-trained classifier.</p>
 <aside class="margin sidebar">
 <p class="sidebar-title"></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The order of our features is the same as the list of shapefiles we defined earlier.</p>
+<p>The DataFrame must have the same column names as the <code class="docutils literal notranslate"><span class="pre">X_train</span></code> variable.</p>
 </div>
 </aside>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shapefiles</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;data/cleared.shp&#39;,
- &#39;data/forest.shp&#39;,
- &#39;data/grass.shp&#39;,
- &#39;data/lake.shp&#39;,
- &#39;data/ocean.shp&#39;,
- &#39;data/river.shp&#39;,
- &#39;data/sand.shp&#39;]
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-</section>
-<section id="summary-statistics-for-the-training-dataset">
-<h2>Summary statistics for the training dataset<a class="headerlink" href="#summary-statistics-for-the-training-dataset" title="Link to this heading">#</a></h2>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This may take a few minutes.</p>
+</div>
+</aside>
+<p>The variable <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> is now a list of labels for each row, which we can add as a column to the original DataFrame.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">training_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;labels&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -859,212 +888,153 @@
       <th>band5</th>
       <th>band6</th>
       <th>band7</th>
-    </tr>
-    <tr>
       <th>labels</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>6</td>
+    </tr>
+    <tr>
       <th>1</th>
-      <td>8161.185504</td>
-      <td>8448.916462</td>
-      <td>9352.192875</td>
-      <td>9788.692875</td>
-      <td>15444.443489</td>
-      <td>16229.616708</td>
-      <td>12594.883292</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>7416.639942</td>
-      <td>7487.944606</td>
-      <td>8048.635569</td>
-      <td>7681.294461</td>
-      <td>15653.613703</td>
-      <td>10159.087464</td>
-      <td>8349.674927</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>7820.300981</td>
-      <td>8053.422028</td>
-      <td>9506.115594</td>
-      <td>8962.172301</td>
-      <td>23864.091603</td>
-      <td>15648.476554</td>
-      <td>11192.743730</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>7384.654624</td>
-      <td>7691.852601</td>
-      <td>8486.945087</td>
-      <td>8166.203757</td>
-      <td>7728.687861</td>
-      <td>7743.832370</td>
-      <td>7699.452312</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>7313.515112</td>
-      <td>7540.395532</td>
-      <td>7787.961235</td>
-      <td>7547.877464</td>
-      <td>7602.442838</td>
-      <td>7799.425427</td>
-      <td>7775.527595</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>7331.883721</td>
-      <td>7511.483721</td>
-      <td>7940.525581</td>
-      <td>7603.255814</td>
-      <td>7509.227907</td>
-      <td>7500.590698</td>
-      <td>7466.423256</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>12785.408602</td>
-      <td>13732.512545</td>
-      <td>16671.784946</td>
-      <td>18257.075269</td>
-      <td>19734.172043</td>
-      <td>22963.752688</td>
-      <td>22489.347670</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>6</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-</section>
-<section id="separability-testing">
-<h2>Separability testing<a class="headerlink" href="#separability-testing" title="Link to this heading">#</a></h2>
-<p>Before we begin our classification, we should check the separability of our training data. We can do this using a bi-spectral plot.</p>
+<p>One problem here is that the <strong>NoData</strong> values of the Landsat image (represented as zeros) are classified as <strong>label 6</strong>. It would be more sensible to classify these values as <strong>zero</strong>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the bands to plot (you can choose any two)</span>
-<span class="n">x_band</span> <span class="o">=</span> <span class="s1">&#39;band6&#39;</span>
-<span class="n">y_band</span> <span class="o">=</span> <span class="s1">&#39;band5&#39;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set labels to zero where values in band 1 are equal to zero</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;band1&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can now <code class="docutils literal notranslate"><span class="pre">reshape</span></code> the labels column to the original 2D shape of the Landsat image.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find shape of one Landsat band</span>
+<span class="n">src</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-<span class="c1"># Define colors for each label using a colormap</span>
-<span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;tab10&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>  <span class="c1"># 7 classes in total</span>
+<span class="c1"># Reshape</span>
+<span class="n">y_pred_2d</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">y_pred_2d</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1422, 1208)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot">
+<h3>Plot<a class="headerlink" href="#plot" title="Link to this heading">#</a></h3>
+<p>We can qualitatively inspect our classification by plotting as a map with each class as a different color.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ticker</span>
 
-<span class="c1"># Create the plot</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="c1"># Define a colormap with seven distinct colors</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;tab10&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
 
-<span class="c1"># Plot data for each class label</span>
-<span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()):</span>
-    <span class="n">class_data</span> <span class="o">=</span> <span class="n">training_data</span><span class="p">[</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">label</span><span class="p">]</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-        <span class="n">class_data</span><span class="p">[</span><span class="n">x_band</span><span class="p">],</span> 
-        <span class="n">class_data</span><span class="p">[</span><span class="n">y_band</span><span class="p">],</span> 
-        <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Class </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> 
-        <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">label</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
-        <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="c1"># Define new class labels</span>
+<span class="n">class_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NaN&#39;</span><span class="p">,</span> <span class="s1">&#39;cleared&#39;</span><span class="p">,</span> <span class="s1">&#39;forest&#39;</span><span class="p">,</span> <span class="s1">&#39;grass&#39;</span><span class="p">,</span> <span class="s1">&#39;lake&#39;</span><span class="p">,</span> <span class="s1">&#39;ocean&#39;</span><span class="p">,</span> <span class="s1">&#39;river&#39;</span><span class="p">,</span> <span class="s1">&#39;sand&#39;</span><span class="p">]</span>
 
-<span class="c1"># Customize the plot</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x_band</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">y_band</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1"># Plot the classified image</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y_pred_2d</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
 
-<span class="c1"># Show the plot</span>
+<span class="c1"># Center the labels in the colorbar</span>
+<span class="n">tick_locs</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">7</span> <span class="o">/</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">FixedLocator</span><span class="p">(</span><span class="n">tick_locs</span><span class="p">))</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">ticker</span><span class="o">.</span><span class="n">FixedFormatter</span><span class="p">(</span><span class="n">class_labels</span><span class="p">))</span>
+
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fae7a9b8248e60beeebaadd5ee15006aef331f7102747626f8a8500357632539.png" src="../_images/fae7a9b8248e60beeebaadd5ee15006aef331f7102747626f8a8500357632539.png" />
+<img alt="../_images/005e88b6634a8c15a82c7147192e01ea4243c0f1cb3188408c6c71cab10a7620.png" src="../_images/005e88b6634a8c15a82c7147192e01ea4243c0f1cb3188408c6c71cab10a7620.png" />
 </div>
 </div>
-<p>This is really useful. It looks like we should have no problem distinguishing between Class 1 (cleared), Class 2 (forest), Class 3 (grass), and Class 7 (sand). However, it might be difficult distinguishing between our different water classes 4, 5, and 6 (i.e. lake, ocean, and river).</p>
+<p>Even though our testing dataset revealed that the accuracy of our classification was &gt;99%, there are clearly errors. It looks like some of the <code class="docutils literal notranslate"><span class="pre">river</span></code> was classified as <code class="docutils literal notranslate"><span class="pre">lake</span></code>, and some of the <code class="docutils literal notranslate"><span class="pre">ocean</span></code> near the land was classified as <code class="docutils literal notranslate"><span class="pre">river</span></code> or <code class="docutils literal notranslate"><span class="pre">lake</span></code>. This is not surprising given the lack of separability between these three classes that we identified in the previous demo. Clearly our training dataset does not represent the full spectral range of these classes. We should go back into QGIS and digitize more training data in these areas to see if we can do a better job of classifying them.</p>
 </section>
-<section id="m-statistic">
-<h2>M-statistic<a class="headerlink" href="#m-statistic" title="Link to this heading">#</a></h2>
-<p>The M-statistic is a measure of class separability, often used in remote sensing and classification analysis. It evaluates how distinct two classes are by comparing the distance between their mean values relative to their standard deviations.</p>
-<p>Below is a function to compute the M-statistic for two classes at a time.</p>
+<section id="export-as-geotiff">
+<h3>Export as GeoTIFF<a class="headerlink" href="#export-as-geotiff" title="Link to this heading">#</a></h3>
+<p>We can refine our training dataset in QGIS. But first it would be useful export our first classification attempt as a GeoTIFF to see where the errors are.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">m_statistic</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">):</span>
-    <span class="c1"># Extract data for Class 1 and Class 2</span>
-    <span class="n">class_1</span> <span class="o">=</span> <span class="n">training_data</span><span class="p">[</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">c1</span><span class="p">][[</span><span class="s1">&#39;band1&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">,</span> <span class="s1">&#39;band3&#39;</span><span class="p">,</span> <span class="s1">&#39;band4&#39;</span><span class="p">,</span> <span class="s1">&#39;band5&#39;</span><span class="p">,</span> <span class="s1">&#39;band6&#39;</span><span class="p">,</span> <span class="s1">&#39;band7&#39;</span><span class="p">]]</span>
-    <span class="n">class_2</span> <span class="o">=</span> <span class="n">training_data</span><span class="p">[</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">c2</span><span class="p">][[</span><span class="s1">&#39;band1&#39;</span><span class="p">,</span> <span class="s1">&#39;band2&#39;</span><span class="p">,</span> <span class="s1">&#39;band3&#39;</span><span class="p">,</span> <span class="s1">&#39;band4&#39;</span><span class="p">,</span> <span class="s1">&#39;band5&#39;</span><span class="p">,</span> <span class="s1">&#39;band6&#39;</span><span class="p">,</span> <span class="s1">&#39;band7&#39;</span><span class="p">]]</span>
-    
-    <span class="c1"># Compute means and standard deviations for each band</span>
-    <span class="n">mean_1</span> <span class="o">=</span> <span class="n">class_1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    <span class="n">mean_2</span> <span class="o">=</span> <span class="n">class_2</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    
-    <span class="n">std_1</span> <span class="o">=</span> <span class="n">class_1</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
-    <span class="n">std_2</span> <span class="o">=</span> <span class="n">class_2</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
-    
-    <span class="c1"># Compute M-statistic for each band</span>
-    <span class="n">M_statistic</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">mean_1</span> <span class="o">-</span> <span class="n">mean_2</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">std_1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">std_2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    
-    <span class="c1"># Display results</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">M_statistic</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+        <span class="s2">&quot;data/classified.tif&quot;</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span>
+        <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">=</span><span class="n">y_pred_2d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">width</span><span class="o">=</span><span class="n">y_pred_2d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">y_pred_2d</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="n">crs</span><span class="o">=</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">src</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">new_dataset</span><span class="p">:</span>
+        <span class="n">new_dataset</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">y_pred_2d</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m_statistic</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>band1    2.906937
-band2    3.384646
-band3    2.807394
-band4    3.653126
-band5    0.064677
-band6    3.030287
-band7    3.367483
-dtype: float64
-</pre></div>
-</div>
-</div>
-</div>
-<aside class="margin sidebar">
-<p class="sidebar-title"></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>M &lt; 1: Poor separability</p>
-<p>1 ≤ M ≤ 2: Moderate separability</p>
-<p>M &gt; 2: Good separability.</p>
-</div>
-</aside>
-<p>The M-Statistic confirms that there should be good separability between Classes 1 (cleared) and 2 (forest) for all the bands except Band 5.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m_statistic</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>band1    0.471940
-band2    0.810753
-band3    1.106840
-band4    1.339791
-band5    0.709128
-band6    0.201126
-band7    0.282104
-dtype: float64
-</pre></div>
-</div>
-</div>
-</div>
-<p>In contrast, the M-Statistic shows that Classes 4 (lake) and 5 (ocean) are going to be difficult to separate. If we are, we might have best success using Band 3 and 4.</p>
+<p>This is the end of the demo.</p>
+</section>
 </section>
 </section>
 
@@ -1099,7 +1069,7 @@ dtype: float64
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../assignments/01-assignment.html"
+       href="../assignments/02-assignment.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
@@ -1108,7 +1078,7 @@ dtype: float64
       </div>
     </a>
     <a class="right-next"
-       href="../assignments/02-assignment.html"
+       href="../assignments/03-assignment.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
@@ -1133,13 +1103,16 @@ dtype: float64
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-data">Preparing data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#produce-training-dataset">Produce training dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#masking-raster-data-using-shapefile">Masking raster data using shapefile</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#format-training-dataset">Format training dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics-for-the-training-dataset">Summary statistics for the training dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#separability-testing">Separability testing</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#m-statistic">M-statistic</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classification">Classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#k-nearest-neighbors">K-nearest Neighbors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#split-training-and-testing-data">Split training and testing data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-classifier-fit-classifier-and-predict-labels">Define classifier, fit classifier, and predict labels</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate-classifier">Evaluate classifier</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classify-whole-image">Classify whole image</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot">Plot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-as-geotiff">Export as GeoTIFF</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
