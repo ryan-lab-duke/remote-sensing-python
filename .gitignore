@@ -1,1 +1,4 @@
 rubrics/*
+book/demos/model/*
+book/demos/data/EuroSAT_RGB/*
+book/demos/data/buildings/*
